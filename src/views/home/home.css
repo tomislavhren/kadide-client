@@ -1,0 +1,134 @@
+.home {
+	overflow: hidden;
+}
+
+.home__content {
+
+}
+
+.home__content-label {
+	color: rgba(0, 0, 0, .84);
+	font-size: .9rem;
+	padding: 16px;
+	padding-bottom: 4px;
+	font-weight: 500;
+    line-height: 1.5;
+	letter-spacing: 0.01071em;
+	text-transform: uppercase;
+}
+
+.news {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	padding: 16px;
+	overflow: scroll;
+}
+
+.news::-webkit-scrollbar {
+	display: none;
+}
+
+.news-item {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12);
+	margin-right: 8px;
+	border-radius: 4px;
+	height: calc((100vw - 32px) * 2/5);
+	min-width: calc(100vw - 64px);
+	background: white;
+	overflow: hidden;
+	padding: 8px;
+	position: relative;
+}
+
+.news-item--loading.news-item--loading .news-item__image::after {
+	display: block;
+	content: ' ';
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background: #eee;
+	border-radius: 4px;
+	animation: pulse 1s linear infinite;
+}
+
+.news-item--loading.news-item--loading .news-item__content .news-item__title::before,
+.news-item--loading.news-item--loading .news-item__content .news-item__title::after {
+	display: block;
+	content: ' ';
+	position: absolute;
+	height: 1rem;
+	line-height: 1.5rem;
+	background: #eee;
+	border-radius: 4px;
+	z-index: 2;
+	animation: pulse 1s linear infinite;
+}
+
+.news-item--loading.news-item--loading .news-item__content .news-item__title::before {
+	top: 2rem;
+	width: 64%;
+}	
+
+.news-item--loading.news-item--loading .news-item__content .news-item__title::after {
+	top: 0;
+	width: 100%;
+}
+
+.news-item__image {
+	height: 100%;
+	flex: 2;
+	position: relative;
+	padding: 8px;
+}
+
+.news-item__image img {
+	object-fit: cover;
+	width: 100%;
+	height: 100%;
+	border-radius: 4px;
+}
+
+.news-item__content {
+	display: flex;
+	flex-flow: column nowrap;
+	align-content: flex-start;
+	height: 100%;
+	flex: 3;
+	padding: 8px;
+	position: relative;
+}
+
+.news-item__title {
+	font-weight: 500;
+	padding-bottom: 8px;
+	font-size: 1rem;
+	color: rgba(0, 0, 0, 1);
+	position: relative;
+}
+
+.news-item__description {
+	color: rgba(0, 0, 0, .64);
+	font-size: .85rem;
+	overflow: hidden;
+	overflow-y: scroll;
+	position: relative;
+}
+
+.news-item__description::-webkit-scrollbar {
+	display: none;
+}
+
+@keyframes pulse {
+	0% {
+	  background-color: #eee;
+	}
+	100% {
+	  background-color: rgb(220, 220, 220);
+	}
+  }
