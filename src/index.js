@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import moment from 'moment';
 
 import * as serviceWorker from './serviceWorker';
 
@@ -16,6 +17,12 @@ if (process.env.NODE_ENV === 'development' && !sessionStorage.getItem('disableWh
 	const { whyDidYouUpdate } = require('why-did-you-update');
 	whyDidYouUpdate(React);
 }
+
+const lastActivity = localStorage.getItem('lastActivity');
+if (moment().get('date') - moment(lastActivity).get('date') > 0) {
+	localStorage.removeItem('recent');
+}
+localStorage.setItem('lastActivity', new Date());
 
 ReactDOM.render((
 	<Provider store={store}>

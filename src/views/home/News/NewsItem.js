@@ -13,7 +13,7 @@ const NewsItem = ({
 			</div>
 			<div className="news-item__content">
 				<div className="news-item__title">{title}</div>
-				<div className="news-item__description">{description}</div>
+				<div className="news-item__description">{description && `${description.slice(0, 56)}...`}</div>
 			</div>
 		</div>
 	);

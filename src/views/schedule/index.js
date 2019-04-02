@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
-import { getSchedule } from '../../core/services/schedule/schedule.actions';
+import { getDiffInMinutes } from '../../core/services/schedule/schedule.helpers';
 
 import './schedule.css';
 
@@ -14,26 +14,19 @@ const EMPTY_OBJECT = {};
 class Schedule extends PureComponent {
 
 	state = {
-		routeId: '',
-		activeTab: 0,
-		isBusRoute: false,
-		isRotated: undefined,
-		isLoading: false
+		isBusRoute: false
 	}
 
-	async componentDidMount() {
-		const { match: { params: { routeId } } } = this.props;
-		this.setState({ isLoading: true }, async () => {
-			await this.props.getSchedule(routeId);
-			this.setState({ isLoading: false });
-		});
+	_scheduleListRef = null;
+
+	constructor(props) {
+		super(props);
+		this._scheduleListRef = React.createRef();
 	}
 
 	getDiffInMinutes = (time) => {
-		const departureTime = moment(time);
-		const now = moment();
-		let minutes = departureTime.diff(now, 'minutes');
-		minutes = minutes > 0 ? minutes : 0;
+		const minutes = getDiffInMinutes(time);
+
 		let departureTimeClassName = 'departure-in-future';
 		if (minutes === 0) {
 			departureTimeClassName = 'departure-left';
@@ -52,17 +45,18 @@ class Schedule extends PureComponent {
 	}
 
 	render() {
-		const { activeTab, isBusRoute, isLoading } = this.state;
-		const { schedule } = this.props;
+		const { isLoading, schedule, activeTab, isBusRoute } = this.props;
 
-		const direction1 = schedule[activeTab] || EMPTY_OBJECT;
+		let direction1 = schedule[activeTab] || EMPTY_OBJECT;
 
 		return (
-			<main className="schedule">
-				<div className={`schedule-loading ${isLoading ? 'is-active' : ''}`}>
-					<div className={`mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active`} />
-				</div>
-				<ul className="schedule__list">
+			<main className={`schedule`}>
+				{isLoading && (
+					<div className="loader-wrapper">
+						<div className="loader" />
+					</div>
+				)}
+				<ul className="schedule__list" ref={this._scheduleListRef}>
 					{(direction1.schedule || EMPTY_ARRAY).map(d => (
 						<li key={d.time} className="schedule__list-item-container">
 							<div className="schedule__list-item mdl-shadow--2dp">
@@ -95,8 +89,13 @@ class Schedule extends PureComponent {
 	}
 }
 
-function mapStateToProps({ schedule }) {
-	return { schedule: schedule.schedule };
+function mapStateToProps({ http: { activeActions }, schedule: { schedule, activeTab, isBusRoute } }) {
+	return {
+		schedule,
+		activeTab,
+		isBusRoute,
+		isLoading: activeActions.includes('getSchedule')
+	};
 }
 
-export default connect(mapStateToProps, { getSchedule })(Schedule);
+export default connect(mapStateToProps)(Schedule);
